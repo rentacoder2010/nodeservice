@@ -49,7 +49,8 @@ app.post('/receive-items', async (req, res) => {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
-      }
+      },
+      data: items   // Kafka Shopify JSON
     };
 
     // Second API call using the access token
