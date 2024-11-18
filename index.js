@@ -10,7 +10,7 @@ app.use(express.json());
 
 let token = null; // Variable to store the generated token
 
-// Open endpoint to receive items
+// Open endpoint to handle items and make API calls
 app.post('/receive-items', async (req, res) => {
   try {
     // Log the received items
@@ -25,36 +25,48 @@ app.post('/receive-items', async (req, res) => {
       'scope': 'appl_1731057439600'
     });
 
-    // Axios configuration
-    const config = {
+    // Axios configuration for token generation
+    const configToken = {
       method: 'post',
       maxBodyLength: Infinity,
       url: 'https://apim-gw-sit-keu.cevalogistics.com/token',
       headers: { 
-        'Content-Type': 'application/x-www-form-urlencoded', 
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Cookie': 'NSC_mc_wt_l8t-johsftt-bmm=ffffffff09e4407e45525d5f4f58455e445a4a42498d; NSC_mc_wt_l8t-johsftt-bmm=ffffffff09e4407d45525d5f4f58455e445a4a42498d; sticky-east=http://haproxy-tcp.haproxy.svc.cluster.local:8080; sticky-west=http://10.233.65.241:8080'
       },
       data: data
     };
 
-    // Make the API request
-    const response = await axios.request(config);
-
-    // Store the token and log it
-    token = response.data;
+    // First API call to get the token
+    const tokenResponse = await axios.request(configToken);
+    token = tokenResponse.data.access_token;
     console.log('Generated token:', token);
 
-    // Send a response back
+    // Axios configuration for the second API call
+    const configData = {
+      method: 'get',
+      url: 'https://apim-gw-sit-keu.cevalogistics.com/some-endpoint', // Replace with the actual endpoint
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    // Second API call using the access token
+    const dataResponse = await axios.request(configData);
+    console.log('Second API response:', dataResponse.data);
+
+    // Send the second API response back to the client
     res.status(200).send({
-      message: 'Items received and token generated successfully.',
-      token: token
+      message: 'Items processed and second API called successfully.',
+      secondApiResponse: dataResponse.data
     });
   } catch (error) {
-    console.error('Error generating token:', error);
+    console.error('Error:', error);
 
     // Send an error response
     res.status(500).send({
-      message: 'Failed to generate token.',
+      message: 'An error occurred while processing.',
       error: error.message
     });
   }
