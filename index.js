@@ -54,13 +54,10 @@ app.post('/receive-items', async (req, res) => {
 
     // Second API call using the access token
     const dataResponse = await axios.request(configData);
-    console.log('Second API response:', dataResponse.data);
+    console.log('Items processed and second API called successfully.', dataResponse.data);
 
     // Send the second API response back to the client
-    res.status(200).send({
-      message: 'Items processed and second API called successfully.',
-      secondApiResponse: dataResponse.data
-    });
+    res.status(200).send();
   } catch (error) {
     console.error('Error:', error);
 
