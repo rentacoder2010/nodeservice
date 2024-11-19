@@ -44,8 +44,8 @@ app.post('/receive-items', async (req, res) => {
 
     // Axios configuration for the second API call
     const configData = {
-      method: 'get',
-      url: 'https://apim-gw-sit-keu.cevalogistics.com/cl/oms/connectorservice/1.0.0/connector/get-connector', // Replace with the actual endpoint
+      method: 'post',
+      url: 'https://apim-gw-sit-keu.cevalogistics.com/cl/oms/connectorservice/1.0.0/connector/create-connector', // Replace with the actual endpoint
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
