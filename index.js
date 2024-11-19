@@ -48,7 +48,9 @@ app.post('/receive-items', async (req, res) => {
       url: 'https://apim-gw-sit-keu.cevalogistics.com/cl/oms/connectorservice/1.0.0/connector/create-connector', // Replace with the actual endpoint
       headers: {
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-shopify-topic': 'orders/create',
+        'x-shopify-order-id': '123456',
       },
       data: items   // Kafka Shopify JSON
     };
